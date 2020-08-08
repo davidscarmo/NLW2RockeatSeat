@@ -2,20 +2,45 @@ import React from 'react';
 import whasappIcon from '../../assets/images/icons/whatsapp.svg'
 
 import './styles.css'; 
+import api from '../../services/api';
 
-const TeacherItem = () => 
+export interface Teacher 
 {
+    id: number; 
+    avatar: string; 
+    bio: string; 
+    cost: number; 
+    name: string; 
+    subject: string; 
+    whatsapp: string;   
+}
+
+interface TeacherItemProps
+{
+    teacher: Teacher;
+}
+
+
+const TeacherItem: React.FC<TeacherItemProps> = ({teacher}) => 
+{
+    const createNewConnection = () => 
+    {
+        api.post('connections', 
+        {
+            user_id: teacher.id,
+        });
+    }
     return (
         <article className="teacher-item">
                     <header>
-                        <img src="https://avatars2.githubusercontent.com/u/43228973?s=400&u=e5b7581417d3beeb4e539aa03adf7d9bc4129304&v=4" alt="David Carmo"/>
+                        <img src={teacher.avatar} alt={teacher.name}/>
                         <div>
-                            <strong> David Carmo</strong>
-                            <span>Matemática</span>
+                            <strong> {teacher.name}</strong>
+                            <span>{teacher.subject}</span>
                         </div>
                     </header>
                     <p>
-                    Mussum Ipsum lover. 
+                    {teacher.bio}
                     <br/><br/>
                     Mussum Ipsum, cacilds vidis litro abertis. Viva Forevis aptent taciti sociosqu ad litora torquent. Em pé sem cair, deitado sem dormir, sentado sem cochilar e fazendo pose. 
                     Cevadis im ampola pa arma uma pindureta. Mé faiz elementum girarzis, nisi eros vermeio.
@@ -23,12 +48,15 @@ const TeacherItem = () =>
                     <footer>
                         <p>
                             Preço/hora 
-                            <strong>80,00</strong>
+                            <strong>{teacher.cost},00</strong>
                         </p>
-                        <button>
+                        <a 
+                            target="__blank"
+                            onClick={createNewConnection} 
+                            href={`https://wa.me/${teacher.whatsapp}`}>
                             <img src={whasappIcon} alt="Whatssapp"/>
                             Entre em contato
-                        </button>
+                        </a>
                     </footer>
                 </article>
     )
